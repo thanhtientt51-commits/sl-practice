@@ -1,32 +1,23 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>申论答题 · AI智能批改</title>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>申论答题 · AI智能批改</title>
 <style>
-:root{--bg:#f5f5f7;--card:#fff;--text:#1d1d1f;--sub:#86868b;--accent:#5865f2;--accent2:#8b5cf6;--border:rgba(0,0,0,.06);--radius:14px;--green:#16a34a;--red:#dc2626}
+:root{--bg:#f5f5f7;--card:#fff;--text:#1d1d1f;--sub:#86868b;--accent:#5865f2;--accent2:#8b5cf6;--border:rgba(0,0,0,.06);--radius:16px;--green:#16a34a;--red:#dc2626}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.5}
 .nav{position:sticky;top:0;z-index:100;background:rgba(245,245,247,.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px}
-.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nav-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
 .nav-badge{font-size:.68em;padding:5px 12px;border-radius:20px;background:#fff;border:1px solid var(--border);color:var(--sub)}
-.main{max-width:1200px;margin:0 auto;padding:32px 24px 40px;display:grid;grid-template-columns:1fr 480px;gap:20px}
-@media(max-width:900px){.main{grid-template-columns:1fr}}
+.main{max-width:1300px;margin:0 auto;padding:32px 24px 40px;display:grid;grid-template-columns:210px 1fr 460px;gap:16px}
+@media(max-width:900px){.main{grid-template-columns:1fr}.type-sidebar,.stats-mini{display:none}}
 .card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:24px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-.card h3{font-size:.78em;font-weight:700;letter-spacing:1px;color:var(--sub);margin-bottom:14px;text-transform:uppercase}
-.q-title{font-size:1.1em;font-weight:700;line-height:1.8;margin-bottom:10px}
-.q-meta{font-size:.72em;color:var(--sub);margin-bottom:16px;display:flex;gap:16px;flex-wrap:wrap}
+.card h3{font-size:.78em;font-weight:700;letter-spacing:1px;color:var(--sub);margin-bottom:14px}
+.q-title{font-size:1.05em;font-weight:700;line-height:1.8;margin-bottom:10px}
+.q-meta{font-size:.72em;color:var(--sub);margin-bottom:14px;display:flex;gap:16px;flex-wrap:wrap}
 .q-meta span{background:#f0f4ff;padding:4px 10px;border-radius:8px;color:var(--accent)}
-.q-material{font-size:.85em;line-height:1.9;color:#444;background:#fafafa;padding:16px 18px;border-radius:10px;border-left:3px solid var(--accent);margin-bottom:14px;max-height:200px;overflow-y:auto}
-.answer-area{width:100%;min-height:320px;border:2px solid var(--border);border-radius:12px;padding:16px;font-size:.88em;line-height:2;font-family:inherit;resize:vertical;outline:none;background:#fafafa;transition:.2s}
+.q-material{font-size:.84em;line-height:1.9;color:#444;background:#fafafa;padding:14px 16px;border-radius:10px;border-left:3px solid var(--accent);margin-bottom:12px;overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none}
+.q-material::-webkit-scrollbar,.q-scroll::-webkit-scrollbar{display:none}
+.answer-area{width:100%;height:380px;border:2px solid var(--border);border-radius:12px;padding:16px;font-size:.88em;line-height:2;font-family:inherit;resize:none;outline:none;background:#fafafa;overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none}
+.answer-area::-webkit-scrollbar{display:none}
 .answer-area:focus{border-color:var(--accent);background:#fff}
-.upload-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px}
-.upload-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:20px;font-size:.78em;font-weight:600;cursor:pointer;border:1px dashed var(--accent);background:#f0f4ff;color:var(--accent);transition:.2s}
-.upload-btn:hover{background:#e0e8ff}
-.upload-btn input{display:none}
-.photo-preview{max-width:200px;max-height:150px;border-radius:8px;border:1px solid var(--border);object-fit:cover;display:none}
-.photo-preview.show{display:block}
 .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
 .btn{padding:10px 22px;border-radius:22px;font-size:.84em;font-weight:700;cursor:pointer;border:0;display:inline-flex;align-items:center;gap:6px;transition:.25s}
 .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 14px rgba(88,101,242,.25)}
@@ -34,328 +25,93 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 .btn-primary:disabled{opacity:.4;transform:none;cursor:not-allowed}
 .btn-ghost{background:#fff;border:1px solid var(--border);color:var(--sub)}
 .btn-ghost:hover{border-color:var(--accent);color:var(--text)}
-.grade-panel{position:sticky;top:80px}
+.type-sidebar{display:flex;flex-direction:column;gap:10px}
+.type-card{background:var(--card);border-radius:18px;padding:18px 14px;cursor:pointer;transition:all .3s cubic-bezier(.25,.1,.25,1);border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.04);display:flex;align-items:center;gap:12px}
+.type-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.08);border-color:rgba(88,101,242,.25)}
+.type-card:active{transform:scale(.98)}
+.type-card .tc-icon{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.85em;background:#f0f4ff}
+.type-card.active{background:#fafaff;border-color:var(--accent);box-shadow:0 4px 16px rgba(88,101,242,.15)}
+.type-card.active .tc-icon{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+.type-card .tc-name{font-size:.78em;font-weight:700;letter-spacing:-.2px}
+.type-card .tc-desc{font-size:.62em;color:var(--sub);margin-top:1px}
+.stats-mini{background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:18px;padding:16px 14px;border:0;box-shadow:0 4px 16px rgba(30,27,75,.3);margin-top:10px}
+.stats-mini .st-val{color:#fbbf24}.stats-mini .st-lbl{color:rgba(255,255,255,.6)}
+.st-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.st-row:last-of-type{border-bottom:none}.st-val{font-size:.85em;font-weight:700}.st-lbl{font-size:.62em}
+.st-checkin{width:100%;margin-top:8px;padding:8px;border-radius:14px;border:0;background:linear-gradient(135deg,#f97316,#ec4899);color:#fff;font-size:.68em;font-weight:700;cursor:pointer;transition:.2s}
+.st-checkin:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(249,115,22,.3)}
+.photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.photo-item{position:relative;border-radius:10px;overflow:hidden;border:2px dashed var(--border);aspect-ratio:1;background:#fafafa;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s}
+.photo-item img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;border-radius:8px}
+.photo-item.has-photo{border-style:solid;border-color:var(--border)}
+.photo-add{font-size:2em;color:#ccc;line-height:1;font-weight:300}
+.photo-del{position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;border:0;cursor:pointer;font-size:.6em;display:flex;align-items:center;justify-content:center;line-height:1;z-index:2}
+.photo-card-body{height:230px;overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none}
+.photo-card-body::-webkit-scrollbar{display:none}
+.grade-panel{display:flex;flex-direction:column;height:calc(100vh - 140px);position:sticky;top:84px}
+.grade-body{flex:1;overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none;min-height:0}
+.grade-body::-webkit-scrollbar{display:none}
 .grade-empty{text-align:center;padding:60px 20px;color:var(--sub);font-size:.82em}
-.grade-result{display:none}
-.grade-result.show{display:block}
+.grade-result{display:none}.grade-result.show{display:block}
 .score-big{text-align:center;padding:20px;background:linear-gradient(135deg,#5865f2,#8b5cf6);border-radius:14px;color:#fff;margin-bottom:16px}
-.score-num{font-size:2.8em;font-weight:800;letter-spacing:-2px}
-.score-label{font-size:.75em;opacity:.85}
+.score-num{font-size:2.8em;font-weight:800;letter-spacing:-2px}.score-label{font-size:.75em;opacity:.85}
 .dim-scores{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
 .dim-item{background:#fafafa;padding:12px;border-radius:10px;text-align:center}
-.dim-val{font-size:1.1em;font-weight:700;color:var(--accent)}
-.dim-label{font-size:.68em;color:var(--sub);margin-top:2px}
+.dim-val{font-size:1.1em;font-weight:700;color:var(--accent)}.dim-label{font-size:.68em;color:var(--sub);margin-top:2px}
 .grade-content{font-size:.82em;line-height:1.9;color:#444}
-.grade-content strong{color:var(--text)}
-.grade-content .praise{color:var(--green)}
-.grade-content .issue{color:var(--red)}
-.grade-content .tip{color:var(--accent)}
 .loading-dots{display:flex;gap:5px;justify-content:center;padding:30px}
 .loading-dots span{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:ld 1.4s infinite}
 .loading-dots span:nth-child(2){animation-delay:.2s}.loading-dots span:nth-child(3){animation-delay:.4s}
 @keyframes ld{0%,60%,100%{opacity:.3;transform:scale(.8)}30%{opacity:1;transform:scale(1.2)}}
 .footer{text-align:center;padding:30px;color:#b0b0b8;font-size:.65em;border-top:1px solid var(--border)}
-.login-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:#f5f5f7;z-index:9999;display:flex;align-items:center;justify-content:center}
-.login-box{background:#fff;border-radius:20px;padding:40px 36px;width:400px;max-width:90%;box-shadow:0 4px 24px rgba(0,0,0,.08);text-align:center}
-.login-box h2{font-size:1.3em;margin-bottom:4px}.login-box p{font-size:.8em;color:var(--sub);margin-bottom:24px}
-.login-box input{width:100%;padding:14px 16px;border:2px solid rgba(0,0,0,.06);border-radius:12px;font-size:.9em;outline:none;margin-bottom:10px;text-align:center;background:#f9f9fb}
-.login-box input:focus{border-color:var(--accent);background:#fff}
-.login-box button{width:100%;padding:14px;background:linear-gradient(135deg,#5865f2,#8b5cf6);color:#fff;border:0;border-radius:12px;font-size:.95em;font-weight:700;cursor:pointer}
-.login-box button:hover{transform:translateY(-1px)}
-.login-overlay.hidden{display:none}
-</style>
-</head>
-<body>
-
-<!-- Login -->
-<div class="login-overlay" id="loginOverlay">
-  <div class="login-box">
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5865f2" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-    <h2>申论答题 · AI智能批改</h2>
-    <p>输入学号开始练习</p>
-    <input type="text" id="studentId" placeholder="学号">
-    <input type="password" id="studentPw" placeholder="密码（初始mima001）">
-    <button onclick="doLogin()">登 录</button>
-    <p style="color:#c41230;font-size:.75em;margin-top:8px;display:none" id="loginErr">学号或密码错误</p>
-  </div>
-</div>
-
-<!-- Nav -->
-<nav class="nav">
-  <div class="nav-inner">
-    <div style="font-size:.9em;font-weight:700">✍️ 申论答题 · AI智能批改</div>
-    <div class="nav-badge">AI 考官多维评分</div>
-  </div>
-</nav>
-
-<!-- Main -->
+</style></head><body>
+<nav class="nav"><div class="nav-inner"><div style="font-size:.9em;font-weight:700"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-3px;margin-right:3px"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>申论答题 · AI智能批改</div><div class="nav-badge">AI 考官多维评分</div></div></nav>
 <div class="main">
-  <div><!-- Left Column -->
-    <div class="card">
-      <h3>📋 申论题目</h3>
-      <div class="q-title" id="qTitle">加载中...</div>
-      <div class="q-meta" id="qMeta"></div>
-      <div class="q-material" id="qMaterial" style="display:none"></div>
-      <div class="btn-row" style="margin-top:8px">
-        <button class="btn btn-ghost" onclick="nextQ()">换一题</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>✍️ 作答区域</h3>
-      <textarea class="answer-area" id="answerText" placeholder="在此输入你的申论答案…&#10;&#10;申论作答要求：&#10;1. 观点明确，逻辑清晰&#10;2. 结合给定材料进行分析&#10;3. 语言规范，条理清楚&#10;4. 字数控制在要求范围内"></textarea>
-      <div class="upload-row">
-        <label class="upload-btn">
-          📷 拍照上传
-          <input type="file" id="photoInput" accept="image/*" onchange="previewPhoto()">
-        </label>
-        <button class="btn btn-ghost" onclick="clearPhoto()" id="clearPhotoBtn" style="display:none">清除照片</button>
-        <img class="photo-preview" id="photoPreview" alt="">
-      </div>
-      <div class="btn-row">
-        <button class="btn btn-primary" id="btnGrade" onclick="gradeEssay()">📝 AI 批改</button>
-        <button class="btn btn-ghost" onclick="clearAll()">清空重写</button>
-      </div>
-    </div>
-  </div>
-
-  <div><!-- Right Column -->
-    <div class="card grade-panel">
-      <h3>🤖 AI 批改结果</h3>
-      <div class="grade-empty" id="gradeEmpty">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <p style="margin-top:12px">提交申论答案后<br>AI 将按多维标准进行智能批改</p>
-      </div>
-      <div class="grade-result" id="gradeResult">
-        <div class="score-big">
-          <div class="score-num" id="scoreNum">--</div>
-          <div class="score-label">综合得分（满分100）</div>
-        </div>
-        <div class="dim-scores">
-          <div class="dim-item"><div class="dim-val" id="dim1">-</div><div class="dim-label">观点立意</div></div>
-          <div class="dim-item"><div class="dim-val" id="dim2">-</div><div class="dim-label">逻辑结构</div></div>
-          <div class="dim-item"><div class="dim-val" id="dim3">-</div><div class="dim-label">论证深度</div></div>
-          <div class="dim-item"><div class="dim-val" id="dim4">-</div><div class="dim-label">语言表达</div></div>
-        </div>
-        <div class="grade-content" id="gradeContent"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
+<div class="type-sidebar" id="typeTabs">
+<div class="type-card active" onclick="pickType('all',this)"><div class="tc-icon">📋</div><div><div class="tc-name">全部题型</div><div class="tc-desc">随机抽取练习</div></div></div>
+<div class="type-card" onclick="pickType('概括归纳',this)"><div class="tc-icon">📝</div><div><div class="tc-name">概括归纳题</div><div class="tc-desc">提炼要点·归纳总结</div></div></div>
+<div class="type-card" onclick="pickType('提出对策',this)"><div class="tc-icon">💡</div><div><div class="tc-name">提出对策题</div><div class="tc-desc">问题分析·对策建议</div></div></div>
+<div class="type-card" onclick="pickType('综合分析',this)"><div class="tc-icon">🔍</div><div><div class="tc-name">综合分析题</div><div class="tc-desc">观点评述·深入剖析</div></div></div>
+<div class="type-card" onclick="pickType('应用文',this)"><div class="tc-icon">📄</div><div><div class="tc-name">应用文写作</div><div class="tc-desc">方案·通知·发言稿</div></div></div>
+<div class="type-card" onclick="pickType('文章论述',this)"><div class="tc-icon">✍️</div><div><div class="tc-name">文章论述题</div><div class="tc-desc">自选角度·深入论述</div></div></div>
+<div class="stats-mini" id="statsMini"><div class="st-row"><span class="st-val" id="stTotal">0</span><span class="st-lbl">做题数</span></div><div class="st-row"><span class="st-val" id="stScore">-</span><span class="st-lbl">平均分</span></div><div class="st-row"><span class="st-val" id="stTime">-</span><span class="st-lbl">平均用时</span></div><div class="st-row"><span class="st-val" id="stStreak">0</span><span class="st-lbl">🔥 连续打卡</span></div><button class="st-checkin" id="stCheckinBtn" onclick="doCheckin()">今日打卡</button></div></div>
+<div><div class="card q-scroll" style="max-height:260px;overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none"><h3>📋 申论题目</h3><div class="q-title" id="qTitle">加载中...</div><div class="q-meta" id="qMeta"></div><div class="q-material" id="qMaterial" style="display:none"></div><div class="btn-row" style="margin-top:8px"><button class="btn btn-ghost" onclick="nextQ()">换一题</button></div></div>
+<div class="card"><h3>✍️ 作答区域</h3><textarea class="answer-area" id="answerText" placeholder="在此输入你的申论答案…&#10;&#10;申论作答要求：&#10;1. 观点明确，逻辑清晰&#10;2. 结合给定材料进行分析&#10;3. 语言规范，条理清楚&#10;4. 字数控制在要求范围内"></textarea><div class="btn-row"><button class="btn btn-primary" id="btnGrade" onclick="gradeEssay()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-3px;margin-right:3px"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/><circle cx="12" cy="19" r="3"/></svg>AI 批改</button><button class="btn btn-ghost" onclick="clearAll()">清空重写</button></div></div>
+<div class="card"><h3>📷 拍照上传 <span style="font-weight:400;color:var(--sub);font-size:.9em">（最多8张）</span></h3><div class="photo-card-body"><div class="photo-grid" id="photoGrid"></div></div><input type="file" id="photoInput" accept="image/*" multiple onchange="addPhotos()" style="display:none"><div class="btn-row" style="margin-top:8px"><button class="btn btn-primary" onclick="gradePhotos()" id="btnGradePhoto" disabled>📷 AI 批改照片</button><button class="btn btn-ghost" onclick="clearPhotos()" id="clearPhotoBtn" style="display:none">清空照片</button></div></div></div>
+<div style="display:flex;flex-direction:column"><div class="card grade-panel"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h3 style="margin-bottom:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-3px;margin-right:3px"><path d="M12 2a4 4 0 014 4v2a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M6 14a6 6 0 0112 0v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4z"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/></svg>AI 批改结果</h3><button class="btn btn-ghost" onclick="clearGrade()" style="font-size:.68em;padding:4px 10px">清除</button></div><div class="grade-body"><div class="grade-empty" id="gradeEmpty"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><p style="margin-top:12px">提交申论答案后<br>AI 将按多维标准进行智能批改</p></div><div class="grade-result" id="gradeResult"><div class="score-big"><div class="score-num" id="scoreNum">--</div><div class="score-label">综合得分（满分100）</div></div><div class="dim-scores"><div class="dim-item"><div class="dim-val" id="dim1">-</div><div class="dim-label">观点立意</div></div><div class="dim-item"><div class="dim-val" id="dim2">-</div><div class="dim-label">逻辑结构</div></div><div class="dim-item"><div class="dim-val" id="dim3">-</div><div class="dim-label">论证深度</div></div><div class="dim-item"><div class="dim-val" id="dim4">-</div><div class="dim-label">语言表达</div></div></div><div class="grade-content" id="gradeContent"></div></div></div></div></div></div>
 <footer class="footer">AI智能批改引擎驱动 · 申论写作练习工具 · 仅供练习参考</footer>
-
 <script>
-var studentId=sessionStorage.getItem("sl_student")||new URLSearchParams(location.search).get("id")||"";
-if(studentId){sessionStorage.setItem("sl_student",studentId);document.getElementById("loginOverlay").classList.add("hidden");if(location.search.includes("id=")){history.replaceState(null,"",location.pathname)}}
-
-function doLogin(){
-  var sid=document.getElementById("studentId").value.trim();
-  var spw=document.getElementById("studentPw").value.trim();
-  if(!sid){document.getElementById("loginErr").style.display="block";document.getElementById("loginErr").textContent="请输入学号";return}
-  if(spw!=="mima001"&&spw!=="gk888"){document.getElementById("loginErr").style.display="block";document.getElementById("loginErr").textContent="密码错误";return}
-  sessionStorage.setItem("sl_student",sid);document.getElementById("loginOverlay").classList.add("hidden");location.reload()
-}
-
-// ====== 申论题库 ======
-var essayBank = [
-  {
-    title: "请围绕「基层治理中的数字化赋能」这一主题，自选角度，自拟题目，写一篇文章。",
-    material: "材料1：某市推行「一网通办」政务服务改革，将37个部门、1200余项事项纳入统一平台，群众办事平均跑动次数从4.6次降至0.8次。\n材料2：某社区引入智能门禁、人脸识别、高空抛物监控等系统，但部分老年人反映「刷脸进不去」「手机不会用」。\n材料3：习近平总书记指出：「要运用大数据提升国家治理现代化水平。」",
-    type: "大作文",
-    words: "1000-1200字"
-  },
-  {
-    title: "根据给定材料，概括当前城市社区治理中存在的主要问题，并提出对策建议。",
-    material: "材料1：某老旧小区物业缺失，垃圾清运不及时，停车位严重不足，居民投诉不断。\n材料2：某社区网格化管理流于形式，网格员每月上报数据雷同率达70%。\n材料3：某社区通过「居民议事厅」协商解决了加装电梯难题，形成了可复制经验。",
-    type: "概括+对策",
-    words: "600-800字"
-  },
-  {
-    title: "请结合对「乡村振兴既要塑形，也要铸魂」这句话的理解，联系实际，写一篇文章。",
-    material: "材料1：某县通过引进龙头企业，打造特色农产品产业链，带动农民人均增收4200元。\n材料2：某村在推进产业发展的同时，重修村规民约，建设文化礼堂，开展「好媳妇」评选活动。\n材料3：某乡镇投入巨资建设文化广场，但建成后使用率不足20%，村民反映「不如建个篮球场」。",
-    type: "大作文",
-    words: "1000-1200字"
-  },
-  {
-    title: "请对给定材料中反映的「指尖上的形式主义」问题进行分析，并提出整治建议。",
-    material: "材料1：某乡镇干部手机里有17个政务APP、23个工作群，每天打卡、留痕、填报占用大量工作时间。\n材料2：某地推行「基层减负」专项行动，清理整合了一批APP和微信群，干部日均处理政务信息时间从3.8小时降至1.2小时。\n材料3：中央层面整治形式主义为基层减负专项工作机制会议强调：「让基层干部从形式主义的束缚中解脱出来。」",
-    type: "分析+对策",
-    words: "600-800字"
-  },
-  {
-    title: "以「青年与时代」为主题，结合报考岗位，谈谈新时代青年公务员应具备的素质和担当。",
-    material: "",
-    type: "论述",
-    words: "800-1000字"
-  }
-];
-
-var currentQ = null;
-var photoData = null;
-
-function nextQ(){
-  currentQ = essayBank[Math.floor(Math.random() * essayBank.length)];
-  document.getElementById("qTitle").textContent = currentQ.title;
-  document.getElementById("qMeta").innerHTML = '<span>'+currentQ.type+'</span> <span>要求：'+currentQ.words+'</span>';
-  var mat = document.getElementById("qMaterial");
-  if(currentQ.material){
-    mat.style.display = "block";
-    mat.textContent = currentQ.material;
-  } else {
-    mat.style.display = "none";
-  }
-  document.getElementById("answerText").value = "";
-  clearPhoto();
-  resetGrade();
-}
-
-function previewPhoto(){
-  var file = document.getElementById("photoInput").files[0];
-  if(!file) return;
-  var reader = new FileReader();
-  reader.onload = function(e){
-    // Compress image for API
-    var img = new Image();
-    img.onload = function(){
-      var canvas = document.createElement("canvas");
-      var maxW = 1200, maxH = 1200;
-      var ratio = Math.min(maxW/img.width, maxH/img.height, 1);
-      canvas.width = img.width * ratio;
-      canvas.height = img.height * ratio;
-      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-      photoData = canvas.toDataURL("image/jpeg", 0.7);
-      document.getElementById("photoPreview").src = photoData;
-      document.getElementById("photoPreview").classList.add("show");
-      document.getElementById("clearPhotoBtn").style.display = "";
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-function clearPhoto(){
-  photoData = null;
-  document.getElementById("photoInput").value = "";
-  document.getElementById("photoPreview").classList.remove("show");
-  document.getElementById("clearPhotoBtn").style.display = "none";
-}
-
-function resetGrade(){
-  document.getElementById("gradeEmpty").style.display = "";
-  document.getElementById("gradeResult").classList.remove("show");
-}
-
-function clearAll(){
-  document.getElementById("answerText").value = "";
-  clearPhoto();
-  resetGrade();
-}
-
-async function gradeEssay(){
-  var text = document.getElementById("answerText").value.trim();
-  if(!text || text.length < 20){
-    alert("请先作答，答案至少20个字");
-    return;
-  }
-
-  var btn = document.getElementById("btnGrade");
-  btn.disabled = true;
-  btn.textContent = "⏳ AI 批改中...";
-
-  document.getElementById("gradeEmpty").style.display = "none";
-  document.getElementById("gradeResult").classList.add("show");
-  document.getElementById("scoreNum").textContent = "...";
-  document.getElementById("gradeContent").innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
-
-  // Build prompt
-  var prompt = `你是申论阅卷考官，请对以下申论答案进行专业批改。
-
-【题目】${currentQ.title}
-【题型】${currentQ.type}
-【字数要求】${currentQ.words}
-${currentQ.material ? '【给定材料】' + currentQ.material : ''}
-
-【考生答案】
-${text}
-
-请从以下四个维度评分（每项满分25分，总分100分）：
-- 观点立意：观点是否明确、深刻，是否紧扣主题
-- 逻辑结构：论述层次是否清晰，结构是否完整
-- 论证深度：论据是否充分，分析是否透彻
-- 语言表达：语言是否规范、流畅，是否符合申论要求
-
-请按以下格式输出：
-
-**总分：XX分** （XX用实际数字）
-
-|| 维度 | 得分 |
-||------|------|
-|| 观点立意 | X/25 |
-|| 逻辑结构 | X/25 |
-|| 论证深度 | X/25 |
-|| 语言表达 | X/25 |
-
-**✅ 优点：**（列举2-3个具体优点）
-**⚠️ 不足：**（列举2-3个具体问题）
-**💡 提升建议：**（给出3条具体可操作的改进建议）
-**📝 参考框架：**（给出这篇申论的理想论述框架）`;
-
-  try {
-    var res = await fetch("https://api.deepseek.com/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer sk-0541b3112cd44ec18041c235d380affc"
-      },
-      body: JSON.stringify({
-        model: "deepseek-chat",
-        messages: [{role: "user", content: prompt}],
-        max_tokens: 2000,
-        temperature: 0.7
-      })
-    });
-
-    var data = await res.json();
-    var result = data.choices[0].message.content;
-
-    // Parse score
-    var scoreMatch = result.match(/总分[：:]\s*(\d{1,3})\s*分/);
-    var score = scoreMatch ? parseInt(scoreMatch[1]) : 0;
-
-    // Parse dimension scores
-    var dims = ["观点立意","逻辑结构","论证深度","语言表达"];
-    for(var i=0;i<dims.length;i++){
-      var re = new RegExp(dims[i] + "[^0-9]*?(\\d{1,2})\\s*/\\s*25");
-      var m = result.match(re);
-      document.getElementById("dim"+(i+1)).textContent = m ? m[1] + "/25" : "-";
-    }
-
-    document.getElementById("scoreNum").textContent = score;
-    document.getElementById("gradeContent").innerHTML = result
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\n/g, '<br>')
-      .replace(/✅/g, '<span class="praise">✅')
-      .replace(/⚠️/g, '<span class="issue">⚠️')
-      .replace(/💡/g, '<span class="tip">💡')
-      .replace(/📝/g, '<span class="tip">📝')
-      .replace(/\|\|(.+?)\|\|/g, '<table border="1" style="border-collapse:collapse;margin:8px 0;width:100%">$1</table>')
-      .replace(/正正/g, '</span>')
-      .replace(/正正/g, '')
-      .replace(/正正/g, '');
-
-  } catch(e) {
-    document.getElementById("gradeContent").innerHTML = "网络错误，请重试";
-  }
-
-  btn.disabled = false;
-  btn.textContent = "📝 AI 批改";
-}
-
-nextQ();
+var studentId=new URLSearchParams(location.search).get("id")||"";
+var essayBank={"概括归纳":[{t:"根据给定材料，概括城市社区治理中存在的主要问题并提出对策。",m:"材料1：某老旧小区物业缺失，垃圾清运不及时，停车位严重不足。\\n材料2：某社区网格化管理流于形式。\\n材料3：某社区通过「居民议事厅」协商解决了加装电梯难题。",p:"概括+对策",w:"600-800字"},{t:"根据给定材料，归纳H市推进数字政府建设的主要做法。",m:"材料1：H市推行「一网通办」改革，将37个部门纳入统一平台。\\n材料2：H市建立政务数据共享交换平台。",p:"归纳概括",w:"400-600字"},{t:"概括农村人居环境整治中的主要困难。",m:"材料1：某县农村改厕工程推进缓慢。\\n材料2：某乡镇垃圾转运站选址困难。",p:"归纳概括",w:"400-600字"}],"提出对策":[{t:"对「指尖上的形式主义」问题进行分析并提出整治建议。",m:"材料1：某乡镇干部手机有17个政务APP。\\n材料2：某地推行「基层减负」专项行动。\\n材料3：中央会议强调「让基层干部从形式主义的束缚中解脱出来。」",p:"分析+对策",w:"600-800字"},{t:"提出促进高校毕业生就业的对策建议。",m:"材料1：2026年全国高校毕业生预计达1198万人。\\n材料2：某市推出「青年人才驿站」免费住宿+就业指导。",p:"对策建议",w:"600-800字"},{t:"就推动养老服务高质量发展提出建议。",m:"材料1：我国60岁以上人口已超3亿。\\n材料2：某市推行「时间银行」互助养老模式。",p:"对策建议",w:"600-800字"}],"综合分析":[{t:"谈谈对「乡村振兴既要塑形，也要铸魂」的认识。",m:"材料1：某县引进龙头企业打造特色农产品产业链。\\n材料2：某村重修村规民约，建设文化礼堂，开展「好媳妇」评选。",p:"综合分析",w:"800-1000字"},{t:"分析「地摊经济」对城市治理带来的机遇与挑战。",m:"材料1：某市划定「外摆经营」区域带动就业。\\n材料2：部分街道夜市噪音扰民引发投诉。",p:"综合分析",w:"600-800字"},{t:"谈谈对「绿水青山就是金山银山」的理解。",m:"材料1：某县关停污染企业发展生态旅游，年游客从20万增至150万。\\n材料2：某地区对违规排污「睁一只眼闭一只眼」。",p:"综合分析",w:"600-800字"}],"应用文":[{t:"就推广垃圾分类工作写一份工作方案。",m:"",p:"工作方案",w:"800-1000字"},{t:"为县政府主要领导起草「优化营商环境」座谈会发言稿。",m:"材料：该县新增市场主体同比下降15%。",p:"发言稿",w:"800-1000字"},{t:"撰写一份「邻里文化节」活动通知。",m:"",p:"通知",w:"400-600字"}],"文章论述":[{t:"围绕「基层治理中的数字化赋能」写一篇文章。",m:"材料1：某市推行「一网通办」，办事跑动次数降至0.8次。\\n材料2：某社区引入智能门禁，老人反映「刷脸进不去」。\\n材料3：习近平总书记指出「要运用大数据提升国家治理现代化水平。」",p:"大作文",w:"1000-1200字"},{t:"以「青年与时代」为主题，谈青年公务员的素质和担当。",m:"",p:"论述",w:"800-1000字"},{t:"以「让城市更有温度」为题写一篇文章。",m:"材料1：某市通过「居民议事厅」协商解决加装电梯难题。\\n材料2：某地推行「无障碍城市」建设。\\n材料3：城管局推行「首违不罚」。",p:"大作文",w:"1000-1200字"}]};
+var currentType="all",currentQ=null,photos=[],qStartTime=0,SK=(studentId||"guest")+"_sl_stats",stats=JSON.parse(localStorage.getItem(SK)||'{"total":0,"totalScore":0,"totalTime":0,"streak":0,"lastCheckin":null}');
+function saveStats(){localStorage.setItem(SK,JSON.stringify(stats));renderStats()}
+function renderStats(){document.getElementById("stTotal").textContent=stats.total;document.getElementById("stScore").textContent=stats.total>0?(stats.totalScore/stats.total).toFixed(0):"-";document.getElementById("stTime").textContent=stats.total>0?(stats.totalTime/stats.total).toFixed(1)+"s":"-";document.getElementById("stStreak").textContent=stats.streak;var td=new Date().toISOString().slice(0,10),btn=document.getElementById("stCheckinBtn");if(stats.lastCheckin===td){btn.textContent="已打卡";btn.style.opacity=".6";btn.style.background="linear-gradient(135deg,#86efac,#22c55e)"}else{btn.textContent="今日打卡";btn.style.opacity="1";btn.style.background="linear-gradient(135deg,#f97316,#ec4899)"}}
+function doCheckin(){var td=new Date().toISOString().slice(0,10);if(stats.lastCheckin===td)return;var yd=new Date(Date.now()-864e5).toISOString().slice(0,10);stats.streak=(stats.lastCheckin===yd)?stats.streak+1:1;stats.lastCheckin=td;saveStats();var cb=document.getElementById("stCheckinBtn");cb.textContent="已打卡";cb.style.opacity=".6";cb.style.background="linear-gradient(135deg,#86efac,#22c55e)"}
+function pickType(t,el){currentType=t;document.querySelectorAll("#typeTabs .type-card").forEach(function(x){x.classList.remove("active")});el.classList.add("active");nextQ()}
+function nextQ(){var pool=currentType==="all"?[].concat.apply([],Object.values(essayBank)):essayBank[currentType];currentQ=pool[Math.floor(Math.random()*pool.length)];qStartTime=Date.now();document.getElementById("qTitle").textContent=currentQ.t;document.getElementById("qMeta").innerHTML='<span>'+currentQ.p+'</span><span>要求:'+currentQ.w+'</span>';var mat=document.getElementById("qMaterial");if(currentQ.m){mat.style.display="block";mat.textContent=currentQ.m}else{mat.style.display="none"}document.getElementById("answerText").value="";clearGrade()}
+function trigPhoto(){document.getElementById("photoInput").click()}
+function addPhotos(){var files=document.getElementById("photoInput").files;if(!files.length)return;var rem=8-photos.length;if(rem<=0){alert("最多8张");document.getElementById("photoInput").value="";return}var n=Math.min(files.length,rem),loaded=0;for(var i=0;i<n;i++){(function(file){var r=new FileReader();r.onload=function(e){var img=new Image();img.onload=function(){var c=document.createElement("canvas"),mw=1200,mh=1200,ra=Math.min(mw/img.width,mh/img.height,1);c.width=img.width*ra;c.height=img.height*ra;c.getContext("2d").drawImage(img,0,0,c.width,c.height);photos.push(c.toDataURL("image/jpeg",0.7));loaded++;if(loaded===n)renderPhotos()};img.src=e.target.result};r.readAsDataURL(file)})(files[i])}document.getElementById("photoInput").value=""}
+function removePhoto(i){photos.splice(i,1);renderPhotos()}
+function clearPhotos(){photos=[];document.getElementById("btnGradePhoto").disabled=true;document.getElementById("clearPhotoBtn").style.display="none";renderPhotos();document.getElementById("photoInput").value=""}
+function renderPhotos(){var g=document.getElementById("photoGrid"),b=document.getElementById("clearPhotoBtn"),gb=document.getElementById("btnGradePhoto"),htm="";for(var i=0;i<8;i++){if(i<photos.length)htm+='<div class="photo-item has-photo"><img src="'+photos[i]+'"><button class="photo-del" onclick="removePhoto('+i+')">✕</button></div>';else if(i===photos.length)htm+='<div class="photo-item" onclick="trigPhoto()"><span class="photo-add">+</span></div>';else htm+='<div class="photo-item"><span class="photo-add" style="color:#e8e8e8">+</span></div>'}g.innerHTML=htm;b.style.display=photos.length?"":"none";gb.disabled=!photos.length}
+function clearGrade(){document.getElementById("gradeEmpty").style.display="";document.getElementById("gradeResult").classList.remove("show");document.getElementById("scoreNum").textContent="--";for(var i=1;i<=4;i++)document.getElementById("dim"+i).textContent="-";document.getElementById("gradeContent").innerHTML=""}
+async function gradeEssay(){var text=document.getElementById("answerText").value.trim();if(!text||text.length<20){alert("请先作答，至少20字");return}var btn=document.getElementById("btnGrade");btn.disabled=true;btn.innerHTML='⏳ AI 批改中...';document.getElementById("gradeEmpty").style.display="none";document.getElementById("gradeResult").classList.add("show");document.getElementById("scoreNum").textContent="...";document.getElementById("gradeContent").innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';try{var res=await fetch("https://api.deepseek.com/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer sk-0541b3112cd44ec18041c235d380affc"},body:JSON.stringify({model:"deepseek-chat",messages:[{role:"user",content:"你是申论阅卷考官，请对以下答案批改。\\n【题目】"+currentQ.t+"\\n【题型】"+currentQ.p+"\\n【要求】"+currentQ.w+"\\n"+(currentQ.m?"【材料】"+currentQ.m+"\\n":"")+"【答案】\\n"+text+"\\n从观点立意(25)、逻辑结构(25)、论证深度(25)、语言表达(25)评分，满分100。\\n输出格式:\\n**总分:XX分**\\n||维度|得分||\\n||观点立意|X/25||\\n||逻辑结构|X/25||\\n||论证深度|X/25||\\n||语言表达|X/25||\\n**优点:**(2-3个)\\n**不足:**(2-3个)\\n**提升建议:**(3条)\\n**参考框架:**"}],max_tokens:2000,temperature:.7})});var d=await res.json(),r=d.choices[0].message.content;var sm=r.match(/总分[：:]\\s*(\\d{1,3})\\s*分/),sc=sm?parseInt(sm[1]):0;var elapsed=(Date.now()-qStartTime)/1000;stats.total++;stats.totalScore+=sc;stats.totalTime+=elapsed;saveStats();var dims=["观点立意","逻辑结构","论证深度","语言表达"];for(var i=0;i<4;i++){var re=new RegExp(dims[i]+"[^0-9]*?(\\d{1,2})\\s*/\\s*25");var m=r.match(re);document.getElementById("dim"+(i+1)).textContent=m?m[1]+"/25":"-"}document.getElementById("scoreNum").textContent=sc;document.getElementById("gradeContent").innerHTML=r.replace(/\\*\\*(.+?)\\*\\*/g,'<strong>$1</strong>').replace(/\\n/g,'<br>')}catch(e){document.getElementById("gradeContent").innerHTML="网络错误，请重试"}btn.disabled=false;btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-3px;margin-right:3px"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/><circle cx="12" cy="19" r="3"/></svg>AI 批改'}
+async function gradePhotos(){if(!photos.length){alert("请先上传照片");return}var btn=document.getElementById("btnGradePhoto");btn.disabled=true;btn.textContent="⏳ AI 批改中...";document.getElementById("gradeEmpty").style.display="none";document.getElementById("gradeResult").classList.add("show");document.getElementById("scoreNum").textContent="...";document.getElementById("gradeContent").innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';var text=document.getElementById("answerText").value.trim();var prompt="你是申论阅卷考官，请对以下答案批改。\\n【题目】"+currentQ.t+"\\n【题型】"+currentQ.p+"\\n【要求】"+currentQ.w+"\\n"+(currentQ.m?"【材料】"+currentQ.m+"\\n":"")+"【作答】"+(text||"未输入，以照片为准")+"\\n考生提交了"+photos.length+"张照片。\\n从观点立意(25)、逻辑结构(25)、论证深度(25)、语言表达(25)评分，满分100。\\n输出格式:\\n**总分:XX分**\\n||维度|得分||\\n||观点立意|X/25||\\n||逻辑结构|X/25||\\n||论证深度|X/25||\\n||语言表达|X/25||\\n**优点:**(2-3个)\\n**不足:**(2-3个)\\n**提升建议:**(3条)\\n**参考框架:**";try{var res=await fetch("https://api.deepseek.com/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer sk-0541b3112cd44ec18041c235d380affc"},body:JSON.stringify({model:"deepseek-chat",messages:[{role:"user",content:prompt}],max_tokens:2000,temperature:.7})});var d=await res.json(),r=d.choices[0].message.content;var sm=r.match(/总分[：:]\\s*(\\d{1,3})\\s*分/),sc=sm?parseInt(sm[1]):0;var el=(Date.now()-qStartTime)/1000;stats.total++;stats.totalScore+=sc;stats.totalTime+=el;saveStats();var dims=["观点立意","逻辑结构","论证深度","语言表达"];for(var i=0;i<4;i++){var re=new RegExp(dims[i]+"[^0-9]*?(\\d{1,2})\\s*/\\s*25");var m=r.match(re);document.getElementById("dim"+(i+1)).textContent=m?m[1]+"/25":"-"}document.getElementById("scoreNum").textContent=sc;document.getElementById("gradeContent").innerHTML=r.replace(/\\*\\*(.+?)\\*\\*/g,'<strong>$1</strong>').replace(/\\n/g,'<br>')}catch(e){document.getElementById("gradeContent").innerHTML="网络错误，请重试"}btn.disabled=false;btn.textContent="📷 AI 批改照片"}
+function clearAll(){document.getElementById("answerText").value="";clearPhotos();clearGrade()}
+renderPhotos();renderStats();nextQ();
 </script>
-
-<div style="position:fixed;left:12px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:12px;z-index:200"><a href="#" id="linkInterview" style="text-decoration:none"><div style="width:56px;height:56px;border-radius:14px;background:#fff;border:1px solid rgba(0,0,0,.06);color:#86868b;display:flex;align-items:center;justify-content:center;font-size:.72em;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:pointer;writing-mode:vertical-lr;letter-spacing:2px">面试</div></a><a href="#" id="linkXct" style="text-decoration:none"><div style="width:56px;height:56px;border-radius:14px;background:#fff;border:1px solid rgba(0,0,0,.06);color:#86868b;display:flex;align-items:center;justify-content:center;font-size:.72em;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:pointer;writing-mode:vertical-lr;letter-spacing:2px">行测</div></a><a href="#" id="linkMedia" style="text-decoration:none"><div style="width:56px;height:56px;border-radius:14px;background:#fff;border:1px solid rgba(0,0,0,.06);color:#86868b;display:flex;align-items:center;justify-content:center;font-size:.72em;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:pointer;writing-mode:vertical-lr;letter-spacing:2px">文案</div></a><div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#5865f2,#8b5cf6);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72em;font-weight:700;box-shadow:0 4px 16px rgba(88,101,242,.3);cursor:pointer;writing-mode:vertical-lr;letter-spacing:2px;margin-top:12px">申论</div><div style="border-top:1px solid rgba(0,0,0,.06);margin:8px 0"></div><a href="https://thanhtientt51-commits.github.io/shenlunguifanciyu/" style="text-decoration:none"><div style="width:56px;height:56px;border-radius:14px;background:#fff;border:1px solid rgba(0,0,0,.06);color:#86868b;display:flex;align-items:center;justify-content:center;font-size:.62em;font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.04);writing-mode:vertical-lr;letter-spacing:1px">规范词</div></a><a href="https://thanhtientt51-commits.github.io/idiom-practice/" style="text-decoration:none"><div style="width:56px;height:56px;border-radius:14px;background:#fff;border:1px solid rgba(0,0,0,.06);color:#86868b;display:flex;align-items:center;justify-content:center;font-size:.62em;font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.04);writing-mode:vertical-lr;letter-spacing:1px">成语</div></a><a href="https://thanhtientt51-commits.github.io/speech-news/" style="text-decoration:none"><div style="width:56px;height:56px;border-radius:14px;background:#fff;border:1px solid rgba(0,0,0,.06);color:#86868b;display:flex;align-items:center;justify-content:center;font-size:.62em;font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.04);writing-mode:vertical-lr;letter-spacing:1px">讲话</div></a><a href="https://thanhtientt51-commits.github.io/shizheng-news/" style="text-decoration:none"><div style="width:56px;height:56px;border-radius:14px;background:#fff;border:1px solid rgba(0,0,0,.06);color:#86868b;display:flex;align-items:center;justify-content:center;font-size:.62em;font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.04);writing-mode:vertical-lr;letter-spacing:1px">时政</div></a></div><script>document.getElementById("linkInterview").href="https://thanhtientt51-commits.github.io/mock-interview/?id="+encodeURIComponent(studentId);document.getElementById("linkXct").href="https://thanhtientt51-commits.github.io/xct/?id="+encodeURIComponent(studentId);document.getElementById("linkMedia").href="https://thanhtientt51-commits.github.io/gk-media/?id="+encodeURIComponent(studentId);</script>
-
-</body>
-</html>
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.15);z-index:250;display:none"></div>
+<div class="drawer-panel" id="drawerPanel" style="position:fixed;left:-200px;top:0;bottom:0;width:180px;z-index:260;background:var(--bg);border-right:1px solid var(--border);padding:80px 16px 20px;display:flex;flex-direction:column;gap:10px;transition:left .3s ease;box-shadow:4px 0 24px rgba(0,0,0,.06)">
+<div class="drawer-toggle" id="drawerToggle" onclick="toggleDrawer()" style="position:absolute;right:-44px;top:50%;transform:translateY(-50%);background:var(--card);border-radius:0 12px 12px 0;padding:13px 8px;cursor:pointer;box-shadow:2px 0 16px rgba(0,0,0,.08);border:1px solid var(--border);border-left:0;display:flex;flex-direction:column;gap:4px;z-index:261"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+<a href="https://thanhtientt51-commits.github.io/jiangsu-jobs-2026/" class="drawer-btn" style="text-decoration:none;padding:12px 14px;border-radius:12px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:.82em;font-weight:700;text-align:center;display:block">筛岗</a>
+<a href="https://thanhtientt51-commits.github.io/mock-interview/" class="drawer-btn" style="text-decoration:none;padding:12px 14px;border-radius:12px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:.82em;font-weight:700;text-align:center;display:block">面试</a>
+<a href="https://thanhtientt51-commits.github.io/xct/" class="drawer-btn" style="text-decoration:none;padding:12px 14px;border-radius:12px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:.82em;font-weight:700;text-align:center;display:block">行测</a>
+<div class="drawer-btn" style="padding:12px 14px;border-radius:12px;background:linear-gradient(135deg,#5865f2,#8b5cf6);color:#fff;font-size:.82em;font-weight:700;text-align:center">申论</div>
+<div style="border-top:1px solid rgba(0,0,0,.08);margin:4px 0"></div>
+<a href="https://thanhtientt51-commits.github.io/shenlunguifanciyu/" class="drawer-btn" style="text-decoration:none;padding:10px 14px;border-radius:12px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:.68em;font-weight:700;text-align:center;display:block">规范词</a>
+<a href="https://thanhtientt51-commits.github.io/idiom-practice/" class="drawer-btn" style="text-decoration:none;padding:10px 14px;border-radius:12px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:.68em;font-weight:700;text-align:center;display:block">高频成语</a>
+<a href="https://thanhtientt51-commits.github.io/speech-news/" class="drawer-btn" style="text-decoration:none;padding:10px 14px;border-radius:12px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:.68em;font-weight:700;text-align:center;display:block">重要讲话</a>
+<a href="https://thanhtientt51-commits.github.io/shizheng-news/" class="drawer-btn" style="text-decoration:none;padding:10px 14px;border-radius:12px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:.68em;font-weight:700;text-align:center;display:block">每日时政</a>
+</div>
+<script>var drawerOpen=false;function toggleDrawer(){drawerOpen=!drawerOpen;document.getElementById('drawerPanel').style.left=drawerOpen?'0':'-200px';document.getElementById('drawerOverlay').style.display=drawerOpen?'block':'none'}</script>
+</body></html>
